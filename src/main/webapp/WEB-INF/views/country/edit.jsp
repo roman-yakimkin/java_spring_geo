@@ -1,3 +1,10 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: roman
+  Date: 05.08.2020
+  Time: 13:34
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -12,37 +19,20 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/styles/styles.css">
-    <title>New geo project</title>
+    <title>${title}</title>
 </head>
 <body>
-</body>
     <div class="container">
         <div class="row pt-3">
-            <h4>Country list</h4>
-        </div>
-        <div class="row pt-3">
-            <a class="btn btn-primary" href="<c:url value="/country/create" />">Add new country</a>
-        </div>
-        <div class="row pt-3 ">
-            <table class="table table-bordered table-main">
-                <thead>
-                    <tr>
-                        <td>Name</td>
-                        <td>Actions</td>
-                    </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${countries}" var="country">
-                    <tr>
-                        <td class="name">${country.name}</td>
-                        <td class="actions">
-                            <a class="btn btn-link url-edit" href="<c:url value="/country/${country.id}/edit"/>">Edit</a>
-                            <a class="btn btn-link url-delete" href="<c:url value="/country/${country.id}/delete"/>">Delete</a>
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
+            <form class="form-main" action="<c:url value="/country/save" />" method="post">
+                <input type="hidden" name="id" value="${item.id}" />
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" name="name" class="form-control" title="Name" value="${item.name}" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save country</button>
+            </form>
         </div>
     </div>
+</body>
 </html>
