@@ -1,22 +1,19 @@
 package ru.yrv.geo.model;
 
-import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 /**
- * The class - country
+ * The class city
  * @author Roman Yakimkin (r.yakimkin@yandex.ru)
- * @since 04.08.2020
+ * @since 07.08.2020
  * @version 1.0
  */
-public class Country {
+public class City {
     private Integer id = 0;
     private String name;
-    private Set<City> cities = new HashSet<>();
+    private Country country = new Country();
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -32,20 +29,20 @@ public class Country {
         this.name = name;
     }
 
-    public Set<City> getCities() {
-        return cities;
+    public Country getCountry() {
+        return country;
     }
 
-    public void setCities(Set<City> cities) {
-        this.cities = cities;
+    public void setCountry(Country country) {
+        this.country = country;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Country)) return false;
-        Country country = (Country) o;
-        return id.equals(country.getId());
+        if (!(o instanceof City)) return false;
+        City city = (City) o;
+        return Objects.equals(getId(), city.getId());
     }
 
     @Override

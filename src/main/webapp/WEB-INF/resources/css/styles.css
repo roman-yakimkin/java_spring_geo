@@ -6,7 +6,30 @@ td.name {
     width: 100%;
 }
 
+td.city-name {
+    width: 100%;
+}
+
+td.country-name {
+    min-width: 300px;
+}
+
 td.actions {
     min-width: 150px;
+    max-width: 150px;
+}
+
+li.nav-item {
+    display: inline;
+    margin-right: 20px;
+}
+
+ul.table-items {
+    padding-left: 0px;
+}
+
+ul.table-items li {
+    display: inline;
+    margin-right: 20px;
 }
 

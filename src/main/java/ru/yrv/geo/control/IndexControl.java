@@ -24,6 +24,7 @@ public class IndexControl {
 
     @GetMapping("/")
     public String index(Model model) {
+        List<Country> countries = countryDAO.getAll();
         model.addAttribute("countries", countryDAO.getAll());
         return "index";
     }

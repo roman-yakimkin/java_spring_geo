@@ -14,6 +14,7 @@
         <property name="mappingResources">
             <list>
                 <value>country.hbm.xml</value>
+                <value>city.hbm.xml</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -33,4 +34,7 @@
         <constructor-arg name="sf" ref="sessionFactory" />
     </bean>
 
+    <bean id="cityHib" class="ru.yrv.geo.hibernate.CityHib">
+        <constructor-arg name="sf" ref="sessionFactory" />
+    </bean>
 </beans>

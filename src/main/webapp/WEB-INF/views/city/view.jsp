@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: roman
-  Date: 05.08.2020
-  Time: 13:34
+  Date: 08.08.2020
+  Time: 18:44
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -19,34 +19,39 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
-    <title>${title}</title>
+    <title>View city</title>
 </head>
 <body>
-    <div class="container">
-        <div class="row pt-3">
-            <h4>The small geo application</h4>
-        </div>
+<div class="container">
+    <div class="row pt-3">
+        <h4>The small geo application</h4>
     </div>
-    <div class="container">
-        <ul class="nav">
-            <li class="nav-item active"><a href="<c:url value="/" />">Home</a></li>
-            <li class="nav-item"><a href="<c:url value="/country/list" />">Countries</a></li>
-            <li class="nav-item"><a href="<c:url value="/city/list" />">Cities</a></li>
-            <li class="nav-item"><a href="<c:url value="/country/create" />">New country</a></li>
-            <li class="nav-item"><a href="<c:url value="/city/create" />">New city</a></li>
-        </ul>
+</div>
+<div class="container">
+    <ul class="nav">
+        <li class="nav-item active"><a href="<c:url value="/" />">Home</a></li>
+        <li class="nav-item"><a href="<c:url value="/country/list" />">Countries</a></li>
+        <li class="nav-item"><a href="<c:url value="/city/list" />">Cities</a></li>
+        <li class="nav-item"><a href="<c:url value="/country/create" />">New country</a></li>
+        <li class="nav-item"><a href="<c:url value="/city/create" />">New city</a></li>
+    </ul>
+</div>
+<div class="container">
+    <div class="row pt-3">
+        <a class="btn btn-primary" href="<c:url value="/city/${item.id}/edit" />">Edit city</a>
     </div>
-    <div class="container">
-        <div class="row pt-3">
-            <form class="form-main" action="<c:url value="/country/save" />" method="post">
-                <input type="hidden" name="id" value="${item.id}" />
-                <div class="form-group">
-                    <label>Name</label>
-                    <input type="text" name="name" class="form-control" title="Name" value="${item.name}" />
-                </div>
-                <button type="submit" class="btn btn-primary">Save country</button>
-            </form>
-        </div>
+    <div class="row pt-3 ">
+        <table class="table">
+            <tr>
+                <td>Name</td>
+                <td>${item.name}</td>
+            </tr>
+            <tr>
+                <td>Country</td>
+                <td><a href="<c:url value="/country/${item.country.id}"/>">${item.country.name}</a></td>
+            </tr>
+        </table>
     </div>
+</div>
 </body>
 </html>
