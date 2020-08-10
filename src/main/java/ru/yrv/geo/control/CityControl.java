@@ -2,12 +2,11 @@ package ru.yrv.geo.control;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import ru.yrv.geo.dao.CityDAO;
-import ru.yrv.geo.dao.CountryDAO;
 import ru.yrv.geo.model.City;
 import ru.yrv.geo.model.Country;
+import ru.yrv.geo.repository.CityRepository;
+import ru.yrv.geo.repository.CountryRepository;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,17 +20,17 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/city")
 public class CityControl {
-    public final CityDAO cityDAO;
-    public final CountryDAO countryDAO;
+    private final CountryRepository countryRepository;
+    private final CityRepository cityRepository;
 
-    public CityControl(CityDAO cityDAO, CountryDAO countryDAO) {
-        this.cityDAO = cityDAO;
-        this.countryDAO = countryDAO;
+    public CityControl(CountryRepository countryRepository, CityRepository cityRepository) {
+        this.countryRepository = countryRepository;
+        this.cityRepository = cityRepository;
     }
 
     @GetMapping("/list")
     public String list(Model model) {
-        model.addAttribute("cities", cityDAO.getAll());
+        model.addAttribute("cities", cityRepository.findAll());
         return "city/list";
     }
 
@@ -39,7 +38,7 @@ public class CityControl {
     public String create(Model model) {
         model.addAttribute("item", new City());
         model.addAttribute("title", "Add new city");
-        model.addAttribute("countries", countryDAO.getAll());
+        model.addAttribute("countries", countryRepository.findAll());
         return "city/edit";
     }
 
@@ -48,7 +47,7 @@ public class CityControl {
         String path = "city/view";
         try {
             int itemId = Integer.parseInt(id);
-            model.addAttribute("item", cityDAO.get(itemId));
+            model.addAttribute("item", cityRepository.findById(itemId).get());
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
             path = "redirect:/";
@@ -62,8 +61,8 @@ public class CityControl {
         try {
             int itemId = Integer.parseInt(id);
             model.addAttribute("title", "Edit city");
-            model.addAttribute("countries", countryDAO.getAll());
-            model.addAttribute("item", cityDAO.get(itemId));
+            model.addAttribute("countries", countryRepository.findAll());
+            model.addAttribute("item", cityRepository.findById(itemId).get());
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
             path = "redirect:/";
@@ -75,7 +74,7 @@ public class CityControl {
     public String delete(@PathVariable String id) {
         try {
             int itemId = Integer.parseInt(id);
-            cityDAO.delete(itemId);
+            cityRepository.deleteById(itemId);
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
@@ -88,7 +87,7 @@ public class CityControl {
         Country country = new Country();
         country.setId(countryId);
         item.setCountry(country);
-        cityDAO.save(item);
+        cityRepository.save(item);
         return "redirect:/";
     }
 }

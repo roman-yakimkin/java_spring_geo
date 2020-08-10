@@ -3,8 +3,8 @@ package ru.yrv.geo.control;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.yrv.geo.dao.CountryDAO;
 import ru.yrv.geo.model.Country;
+import ru.yrv.geo.repository.CountryRepository;
 
 /**
  * The controller for country entity
@@ -16,15 +16,15 @@ import ru.yrv.geo.model.Country;
 @RequestMapping("/country")
 public class CountryControl {
 
-    public final CountryDAO countryDAO;
+    private final CountryRepository countryRepository;
 
-    public CountryControl(CountryDAO countryDAO) {
-        this.countryDAO = countryDAO;
+    public CountryControl(CountryRepository countryRepository) {
+        this.countryRepository = countryRepository;
     }
 
     @GetMapping("/list")
     public String list(Model model) {
-        model.addAttribute("countries", countryDAO.getAll());
+        model.addAttribute("countries", countryRepository.findAll());
         return "country/list";
     }
 
@@ -40,7 +40,7 @@ public class CountryControl {
         String path = "country/view";
         try {
             int itemId = Integer.parseInt(id);
-            model.addAttribute("item", countryDAO.get(itemId));
+            model.addAttribute("item", countryRepository.findById(itemId).get());
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
             path = "redirect:/";
@@ -54,7 +54,7 @@ public class CountryControl {
         try {
             int itemId = Integer.parseInt(id);
             model.addAttribute("title", "Edit country");
-            model.addAttribute("item", countryDAO.get(itemId));
+            model.addAttribute("item", countryRepository.findById(itemId).get());
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
             path = "redirect:/";
@@ -66,7 +66,7 @@ public class CountryControl {
     public String delete(@PathVariable String id) {
         try {
             int itemId = Integer.parseInt(id);
-            countryDAO.delete(itemId);
+            countryRepository.deleteById(itemId);
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
@@ -75,7 +75,16 @@ public class CountryControl {
 
     @PostMapping("/save")
     public String save(@ModelAttribute Country item) {
-        countryDAO.save(item);
+        if (countryRepository.existsById(item.getId())) {
+            countryRepository.findById(item.getId()).ifPresent(
+                country -> {
+                    country.setName(item.getName());
+                    countryRepository.save(country);
+                }
+            );
+        } else {
+            countryRepository.save(item);
+        }
         return "redirect:/";
     }
 }

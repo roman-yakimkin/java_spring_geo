@@ -10,9 +10,9 @@
         <property name="name" type="java.lang.String">
             <column name="name" />
         </property>
-        <set name="cities" table="city" lazy="false" fetch="select">
+        <set name="cities" table="city" lazy="false" fetch="select" cascade="none" >
             <key>
-                <column name="country_id" not-null="true" />
+                <column name="country_id" not-null="false" />
             </key>
             <one-to-many class="ru.yrv.geo.model.City" />
         </set>

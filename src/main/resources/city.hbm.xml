@@ -11,7 +11,7 @@
             <column name="name" />
         </property>
         <many-to-one name="country" class="ru.yrv.geo.model.Country" lazy="false" fetch="select">
-            <column name="country_id" not-null="true" />
+            <column name="country_id" not-null="false" />
         </many-to-one>
     </class>
 </hibernate-mapping>

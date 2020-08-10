@@ -3,8 +3,7 @@ package ru.yrv.geo.control;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import ru.yrv.geo.dao.CountryDAO;
-import ru.yrv.geo.model.Country;
+import ru.yrv.geo.repository.CountryRepository;
 
 import java.util.List;
 
@@ -16,16 +15,15 @@ import java.util.List;
  */
 @Controller
 public class IndexControl {
-    private final CountryDAO countryDAO;
+    private final CountryRepository countryRepository;
 
-    public IndexControl(CountryDAO countryDAO) {
-        this.countryDAO = countryDAO;
+    public IndexControl(CountryRepository countryRepository) {
+        this.countryRepository = countryRepository;
     }
 
     @GetMapping("/")
     public String index(Model model) {
-        List<Country> countries = countryDAO.getAll();
-        model.addAttribute("countries", countryDAO.getAll());
+        model.addAttribute("countries", countryRepository.findAll());
         return "index";
     }
 }

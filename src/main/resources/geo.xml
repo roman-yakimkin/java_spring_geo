@@ -1,40 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/data/jpa
+       http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="ru.yrv.geo.repository">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+    </context:component-scan>
+    
+    <jpa:repositories base-package="ru.yrv.geo.repository" />
+
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.postgresql.Driver" />
         <property name="url" value="jdbc:postgresql://127.0.0.1:5432/db_geo" />
         <property name="username" value="postgres" />
         <property name="password" value="password" />
     </bean>
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource" />
-<!--        <property name="packagesToScan" value="ru.yrv.geo.model" />-->
         <property name="mappingResources">
             <list>
                 <value>country.hbm.xml</value>
                 <value>city.hbm.xml</value>
             </list>
         </property>
-        <property name="hibernateProperties">
+        <property name="persistenceUnitName" value="jpaData" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+        </property>
+        <property name="jpaProperties">
             <props>
-                <prop key="dialect">org.hibernate.dialect.PostgreSQL10Dialect</prop>
-                <prop key="show_sql">true</prop>
-                <prop key="current_session_context_class">thread</prop>
-                <prop key="connection.pool_size">500</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL10Dialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.format_sql">false</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
             </props>
         </property>
     </bean>
-    <bean id="tx" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory" />
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
     </bean>
 
-    <bean id="countryHib" class="ru.yrv.geo.hibernate.CountryHib">
-        <constructor-arg name="sf" ref="sessionFactory" />
-    </bean>
+<!--    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">-->
+<!--        <property name="dataSource" ref="dataSource" />-->
+<!--&lt;!&ndash;        <property name="packagesToScan" value="ru.yrv.geo.model" />&ndash;&gt;-->
+<!--        <property name="mappingResources">-->
+<!--            <list>-->
+<!--                <value>country.hbm.xml</value>-->
+<!--                <value>city.hbm.xml</value>-->
+<!--            </list>-->
+<!--        </property>-->
+<!--        <property name="hibernateProperties">-->
+<!--            <props>-->
+<!--                <prop key="dialect">org.hibernate.dialect.PostgreSQL10Dialect</prop>-->
+<!--                <prop key="show_sql">true</prop>-->
+<!--                <prop key="current_session_context_class">thread</prop>-->
+<!--                <prop key="connection.pool_size">500</prop>-->
+<!--            </props>-->
+<!--        </property>-->
+<!--    </bean>-->
+<!--    <bean id="tx" class="org.springframework.orm.hibernate5.HibernateTransactionManager">-->
+<!--        <property name="sessionFactory" ref="sessionFactory" />-->
+<!--    </bean>-->
 
-    <bean id="cityHib" class="ru.yrv.geo.hibernate.CityHib">
-        <constructor-arg name="sf" ref="sessionFactory" />
-    </bean>
+<!--    <bean id="countryHib" class="ru.yrv.geo.hibernate.CountryHib">-->
+<!--        <constructor-arg name="sf" ref="sessionFactory" />-->
+<!--    </bean>-->
+
+<!--    <bean id="cityHib" class="ru.yrv.geo.hibernate.CityHib">-->
+<!--        <constructor-arg name="sf" ref="sessionFactory" />-->
+<!--    </bean>-->
 </beans>
